@@ -31,7 +31,7 @@ def piece_wise_model():
 #end piece_wise_model
 
 #start simulation
-def simulation(u, d, theta, timestep):
+def simulation(u, d, theta, timestep, maxy):
     # s= u*t + 1/2*a*t^2;
     t = 0
     g = 9.8
@@ -41,6 +41,7 @@ def simulation(u, d, theta, timestep):
     vh_prev = 0
     count = 0;
     initDraw = drawBasePlot(0, d)
+    total_time = 2 * u * math.sin(theta) / g
     while(True):
         x = u * t * math.cos(theta)
         y = (u * t * math.sin(theta)) - (0.5 * g * t * t)
@@ -67,7 +68,7 @@ def simulation(u, d, theta, timestep):
         count = count + 1
     #end while loop
     t = t - timestep
-    print "Total time of flight = %.2f secs" % (t)
+    print "Total time of flight = %.2f secs, Predicted time of flight = %.2f" % (t, total_time)
     initDraw['plot'].show()
 #end simulation
 
@@ -91,7 +92,7 @@ def parabolic_trajectory_model():
     h = (math.pow(v, 2) * math.pow(math.sin(theta), 2)) / (2 * g)
     arclength = 0.25 * (2 * x * math.sqrt(1 + 4 * x * x) + math.asinh(2 * x)) 
     print "theta = %.2f deg, v = %.2f m/s, max_height = %.2f m" % (theta_deg, v, h)
-    simulation(v, x, theta, 0.05)
+    simulation(v, x, theta, 0.05, h)
 #end parabolic_trajectory_model
 
 #Start the program by invoking init
