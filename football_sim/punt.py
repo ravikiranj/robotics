@@ -7,28 +7,8 @@ from plot_graph import *
 
 #start init
 def init():
-    #piece_wise_model()
     parabolic_trajectory_model()
 #end init
-
-#start piece_wise_model
-def piece_wise_model():
-    x = float(raw_input('Enter the target distance (m) = '))
-    min_theta = 10
-    max_theta = 60
-    #generate a random theta between min_theta and max_theta
-    theta = int((max_theta - min_theta) * random.random() + min_theta)
-    g = 9.8;
-    impact_time = 0.05
-    football_weight = 0.425
-    football_mass = football_weight / g
-
-    #compute initial velocity and force required
-    v0 = math.sqrt((x * g) / (2 * math.sin(theta*math.pi/180) * math.cos(theta*math.pi/180)))
-    F = football_mass * v0 / impact_time; 
-
-    print "x = %.2f m, theta = %d deg, v0 = %.2f m/s, F = %.2f N" % (x, theta, v0, F) 
-#end piece_wise_model
 
 #start simulation
 def simulation(u, d, theta, timestep, maxy):
@@ -76,7 +56,7 @@ def simulation(u, d, theta, timestep, maxy):
 def parabolic_trajectory_model():
     #Refer http://en.wikipedia.org/wiki/Trajectory for explanation
     x = float(raw_input('Enter the target distance (m) = '))
-    min_theta = 25
+    min_theta = 45
     max_theta = 75 
     #generate a random theta between min_theta and max_theta
     theta_deg = int((max_theta - min_theta) * random.random() + min_theta)
