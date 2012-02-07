@@ -2,79 +2,166 @@
 #import required libraries
 import math 
 import random
+import sys
+import os
+import glob
 import plot_graph
 from plot_graph import *
 
+#Constants
+DEBUG = False 
+#DEBUG = True
+
+#start get_models
+def get_models():
+    path = 'models/'
+    return glob.glob(os.path.join(path, '*.ml'))
+#end get_models    
+
+#start read_params
+def read_params(files):
+    params = {}
+    #Choose Model
+    print "Available Models"
+    print "================="
+    count = 1
+    for file in files:
+        print "%d : %s" % (count, file)
+        count += 1
+    choice = int(raw_input("\nModel to load  = "))
+    if(choice < 1 or choice > len(files)):
+        print "Choosing default model = football"
+        params['model'] = 'models/football.ml'
+    else:
+        params['model'] = files[choice-1]
+
+    #Read the required parameters
+    params['v'] = float(raw_input('Enter the velocity (m/s) = '))
+    params['theta_deg'] = float(raw_input('Enter the launch angle (degrees) = '))
+    params['theta'] = params['theta_deg'] * math.pi / 180;
+    return params
+#end read_params
 #start init
 def init():
-    parabolic_trajectory_model()
+    global initDraw
+    files = get_models()
+    params = read_params(files)
+    v = params['v']
+    model_file = params['model']
+    theta_deg = params['theta_deg']
+    theta = params['theta']
+
+    g = 9.8
+    max_dist = pow(v,2) * math.sin(2 * theta) / g
+    t = 2 * v * math.sin(theta) / g
+    dt = 0.1
+    N = t / dt
+
+    model_params = read_model(model_file);
+    initDraw = drawBasePlot(0, max_dist+50, N, max_dist)
+    projectile(v, theta, dt)
+    projectile_with_drag(v, theta, float(model_params['drag_coefficient']), dt)
+    initDraw['plot'].show()
 #end init
 
-#start simulation
-def simulation(u, d, theta, timestep, maxy):
-    # s= u*t + 1/2*a*t^2;
+#start projectile_with_drag
+def projectile_with_drag(v, theta, drag_coefficient, dt):
+    global initDraw
+    #k = rho * C * A / 2
+    k = drag_coefficient 
+    vx = v * math.cos(theta)
+    vy = v * math.sin(theta) 
+    x = 0
+    y = 0
+    t = 0
+    ax = 0
+    ay = 0
+    g = 9.8
+    maxy = 0
+    if(DEBUG):
+        print "ax = %.3f, ay = %.3f, vx = %.3f, vy = %.3f, v = %.3f, x = %.3f, y = %.3f, t = %.3f" % (ax, ay, vx, vy, v, x, y, t)
+    while(True):
+        ax = -k * v * vx
+        ay = -k * v * vy - g
+        vx += ax * dt
+        vy += ay * dt
+        v = math.sqrt(pow(vx, 2) + pow(vy, 2))
+        x += vx * dt + ax * pow(dt, 2)
+        y += vy * dt + ay * pow(dt, 2)
+        if(y > maxy):
+            maxy = y
+        if(y < 0):
+            break
+        t += dt
+        if(DEBUG):
+            print "ax = %.3f, ay = %.3f, vx = %.3f, vy = %.3f, v = %.3f, x = %.3f, y = %.3f, t = %.3f" % (ax, ay, vx, vy, v, x, y, t)
+        updatePlot(initDraw, x, y, 'r')
+    #end of while loop
+    print "Projectile with Drag - Horizontal Distance = %.3f m, Max Height = %.3f m, Total time of flight = %.3f secs" % (x, maxy, t)
+    annonate_str = "with drag\n======\nx = "+str(round(x,2))+"m\nmaxy = "+str(round(maxy,2))+"m\nt = "+str(round(t,2))+" secs"
+    initDraw['axes'].annotate(annonate_str, xy=(0.1, 0.1), xycoords='axes fraction', xytext=(0.8, 0.8), textcoords='axes fraction')
+
+    #initDraw['plot'].show()
+#end projectile_with_drag
+
+#start projectile
+def projectile(v, theta, dt):
+    global initDraw
     t = 0
     g = 9.8
     xprev = 0
     yprev = 0
     vv_prev = 0
     vh_prev = 0
-    count = 0;
-    initDraw = drawBasePlot(0, d)
-    total_time = 2 * u * math.sin(theta) / g
+    maxy = 0
     while(True):
-        x = u * t * math.cos(theta)
-        y = (u * t * math.sin(theta)) - (0.5 * g * t * t)
-        if(y < 0 or count > 1000):
+        x = v * t * math.cos(theta)
+        y = (v * t * math.sin(theta)) - (0.5 * g * t * t)
+        if(y > maxy):
+            maxy = y
+        if(y < 0):
             #For better precision, don't exit unless you're 0.1m near the solution
             if(yprev > 0.1):
-                t = t - timestep
-                timestep = timestep / 10
+                t = t - dt
+                dt = dt / 10
                 continue
+            t -= dt
             break
-        #print "x = %.2f, y = %.2f, t = %.2f" % (x, y, t)
-        #print "x = %.2f, y = %.2f, t = %.2f" % (x, y, t)
-        updatePlot(initDraw, x, y)
-        vv_curr = (y - yprev) / timestep
-        vh_curr = (x - xprev) / timestep
-        v_acc = (vv_curr - vv_prev) / timestep
-        h_acc = (vh_curr - vh_prev) / timestep
-        #print "vv = %.2f, vh = %.2f, v_acc = %.2f, h_acc = %.2f" % (vv_curr, vh_curr, v_acc, h_acc)
-        t = t + timestep
+        updatePlot(initDraw, x, y, 'g')
+        vv_curr = (y - yprev) / dt
+        vh_curr = (x - xprev) / dt
+        v_acc = (vv_curr - vv_prev) / dt
+        h_acc = (vh_curr - vh_prev) / dt
+        if(DEBUG):
+            print "x = %.2f, y = %.2f, t = %.2f, vv = %.2f, vh = %.2f" % (x, y, t, vv_curr, vh_curr)
+        t = t + dt
         xprev = x
         yprev = y
         vv_prev = vv_curr
         vh_prev = vh_curr
-        count = count + 1
     #end while loop
-    t = t - timestep
-    print "Total time of flight = %.2f secs, Predicted time of flight = %.2f" % (t, total_time)
-    initDraw['plot'].show()
-#end simulation
+    print "Projectile - Horizontal Distance = %.3f m, Max Height = %.3f m, Total time of flight = %.3f secs" % (x, maxy, t)
+    annonate_str = "without drag\n========\nx = "+str(round(x,2))+"m\nmaxy = "+str(round(maxy,2))+"m\nt = "+str(round(t,2))+" secs"
+    initDraw['axes'].annotate(annonate_str, xy=(0.1, 0.1), xycoords='axes fraction', xytext=(0.1, 0.8), textcoords='axes fraction')
+#end projectile
 
-#start parabolic_trajectory_model
-def parabolic_trajectory_model():
-    #Refer http://en.wikipedia.org/wiki/Trajectory for explanation
-    x = float(raw_input('Enter the target distance (m) = '))
-    min_theta = 45
-    max_theta = 75 
-    #generate a random theta between min_theta and max_theta
-    theta_deg = int((max_theta - min_theta) * random.random() + min_theta)
-    theta = theta_deg * math.pi /180
-    g = 9.8
-    impact_time = 0.05
-    football_weight = 0.425
-    football_mass = football_weight / g
-    
-    v = math.sqrt((x * g) / math.sin(2 * theta))
-    vv = v * math.sin(theta)
-    vh = v * math.cos(theta)
-    h = (math.pow(v, 2) * math.pow(math.sin(theta), 2)) / (2 * g)
-    arclength = 0.25 * (2 * x * math.sqrt(1 + 4 * x * x) + math.asinh(2 * x)) 
-    print "theta = %.2f deg, v = %.2f m/s, max_height = %.2f m" % (theta_deg, v, h)
-    simulation(v, x, theta, 0.05, h)
-#end parabolic_trajectory_model
+#start read_model
+def read_model(filename):
+    params = {}
+    try:
+        f = open(filename)
+        s = f.readline()
+        while(s != ""):
+            arr = s.split('=')
+            params[arr[0].rstrip().strip()] = arr[1].rstrip().strip()
+            s = f.readline()
+        #end while
+    except IOError as (errno, strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    return params
+#end    
 
-#Start the program by invoking init
-if __name__ == '__main__':
+#Call init
+if __name__ == "__main__":
     init()
+#end 
