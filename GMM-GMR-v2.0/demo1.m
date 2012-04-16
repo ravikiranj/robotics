@@ -45,22 +45,49 @@ nbStates = 4;
 %% Load a dataset consisting of 3 demonstrations of a 2D signal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load('data/data1.mat'); %load 'Data'
-load('data/traj_3_100m_drag.mat'); %load 'Data2'
-load('data/traj_4_100m_250m_drag.mat'); %load 'Data3'
+load('data/traj_2_100m_drag.mat'); 
+load('data/traj_3_100m_drag.mat'); 
+load('data/traj_3_100m_250m_drag.mat'); 
+load('data/traj_4_100m_250m_drag.mat');
+load('data/traj_4_100m_drag.mat');
 
+Data1 = traj_2_100m_drag;
 Data2 = traj_3_100m_drag;
-Data3 = traj_4_100m_250m_drag;
+Data3 = traj_3_100m_250m_drag;
+Data4 = traj_4_100m_250m_drag;
+Data5 = traj_4_100m_drag;
 
 %% Training of GMM by EM algorithm, initialized by k-means clustering.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [Priors, Mu, Sigma] = EM_init_kmeans(Data, nbStates);
 [Priors, Mu, Sigma] = EM(Data, Priors, Mu, Sigma);
 
+% 2 trajectory case
+[Priors1, Mu1, Sigma1] = EM_init_kmeans(Data1, nbStates);
+[Priors1, Mu1, Sigma1] = EM(Data1, Priors1, Mu1, Sigma1);
+
+% 3 trajectory case (all similar)
+[Priors2, Mu2, Sigma2] = EM_init_kmeans(Data2, nbStates);
+[Priors2, Mu2, Sigma2] = EM(Data2, Priors2, Mu2, Sigma2);
+
+% 3 trajectory case (1 variation)
+[Priors3, Mu3, Sigma3] = EM_init_kmeans(Data3, nbStates);
+[Priors3, Mu3, Sigma3] = EM(Data3, Priors3, Mu3, Sigma3);
+
+% 4 trajectory case (1 variation)
 [Priors4, Mu4, Sigma4] = EM_init_kmeans(Data4, nbStates);
 [Priors4, Mu4, Sigma4] = EM(Data4, Priors4, Mu4, Sigma4);
 
-[Priors3, Mu3, Sigma3] = EM_init_kmeans(Data3, nbStates);
-[Priors3, Mu3, Sigma3] = EM(Data3, Priors3, Mu3, Sigma3);
+% 4 trajectory case (all similar)
+[Priors5, Mu5, Sigma5] = EM_init_kmeans(Data5, nbStates);
+[Priors5, Mu5, Sigma5] = EM(Data5, Priors5, Mu5, Sigma5);
+
+diff1_2 = computeVariation(Priors1, Mu1, Sigma1, Priors2, Mu2, Sigma2);
+diff1_3 = computeVariation(Priors1, Mu1, Sigma1, Priors3, Mu3, Sigma3);
+diff2_4 = computeVariation(Priors2, Mu2, Sigma2, Priors4, Mu4, Sigma4);
+diff2_5 = computeVariation(Priors2, Mu2, Sigma2, Priors5, Mu5, Sigma5);
+
+
 %% Use of GMR to retrieve a generalized version of the data and associated
 %% constraints. A sequence of temporal values is used as input, and the 
 %% expected distribution is retrieved. 
