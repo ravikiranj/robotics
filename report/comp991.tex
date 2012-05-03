@@ -109,7 +109,7 @@ a_{y} = -C_{D}vv_{y} - g
 where g = 9.8m/$s^{2}$ and the negative sign indicates that these forces are acting against the launch velocity. 
 
 % Table 1
-\begin{table}[t]
+\begin{table}[t]\renewcommand{\arraystretch}{1.5}\addtolength{\tabcolsep}{-1pt}
 \centering
 \caption{Variation of Model parameters}
 \begin{tabular}{  | c | c | c | c | c |}
@@ -277,65 +277,94 @@ Regular_{memory} = K * bytes_{double} * m * traj_{points}.
 \section{Experimental Results}
 For the experiments, I produced 100 demonstration trajectories using the Physics model outlined in Section IIA. Each of the trajectory has 50 data points and captures 3 components namely horizontal position \emph{x}, vertical position \emph{y} and the time \emph{t}. These trajectories are used to validate my method in the following sections.
 
-\subsection{Splitting trajectory classes}
-%% Figure4
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.5in]{fig4}
-\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 764.60, GMM_{encode} = 0.764, \epsilon=1000$}
-\label{fig:fig4}
-\end{figure}
+\subsection{Expanding/Splitting trajectory classes}
 
-%% Figure5
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.5in]{fig5}
-\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 6321.61, GMM_{encode} = 1, \epsilon=1000$}
-\label{fig:fig5}
-\end{figure}
-
-%% Figure6
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.5in]{fig6}
-\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 7494.22, GMM_{encode} = 1, \epsilon=1000$}
-\label{fig:fig6}
-\end{figure}
-
+% Subfigures
 \begin{figure*}[!t]
 \centerline{
+    %Figure 4
     \subfigure[Case I]{
-        \includegraphics[width=3.5in]{fig4}
+        \includegraphics[width=3.2in]{fig4}
         \label{fig_4}
     }
+    %Figure 5 
     \subfigure[Case II]{
         \includegraphics[width=3.5in]{fig5}
         \label{fig_second_case}
     }
 }
 \centerline{
+    %Figure 6
     \subfigure[Case III]{
-        \includegraphics[width=3.5in]{fig6}
+        \includegraphics[width=3.2in]{fig6}
         \label{fig_second_case}
     }
 }
-\caption{Simulation results}
-\label{fig_sim}
+\caption{In each of the figures, the three subfigures (Trajectory points, GMM Encoded Trajectory, GMR retrieved trajectory) in the upper half correspond to the existing trajectory class and three subfigures in the lower half correspond to the updated trajectory class. (a) Case I - The figure shows 3 existing trajectories captured in the model and on processing a new trajectory, the variation captured is $\Delta_{encode} = 764.60, GMM_{encode} = 0.764, \epsilon=1000$, (b) Case II - The variation captured is $\Delta_{encode} = 6321.61, GMM_{encode} = 1.00, \epsilon=1000$, (c) Case III - The variation captured is $\Delta_{encode} = 7494.22, GMM_{encode} = 1.0, \epsilon=1000$.}
+\label{fig:fig4}
 \end{figure*}
 
+Figure ~\ref{fig:fig4} shows the result of expanding and splitting of existing trajectory classes while processing new trajectories given that the variation threshold of the trajectory class is $\epsilon=1000$. In Figure ~\ref{fig:fig4}, consider Case I, the existing model consists of 3 trajectories which are very similar having a target distance of 100$\pm$5 m. A fourth trajectory is encountered which has a target distance of 97m and upon including this trajectory in the class, the $\Delta_{encode}$ computed is 764.60 and the $GMM_{encode}$ is 0.764 which is less than 1 and hence, it means that the new trajectory can be included in the class.
 
+Consider Case II, the existing model consists of similar trajectories with target distance of 100$\pm$5m. The new trajectory is having the target distance of 250m and upon including this trajectory in the class, the $\Delta_{encode}$ computed is 6321.61 and the $GMM_{encode}$ is 1.0 which means that the new trajectory cannot be included in the class as it will exceed the variation of the class greater than the threshold and will hurt the quality of the retrieved trajectory significantly.
+
+Consider Case III, the existing model is faulty and includes more variation than intended and on trying to include a new trajectory which is again different from existing trajectories, the $\Delta_{encode}$ computed reads 7494.22 and the $GMM_{encode}$ is 1.0. This result shows that the $\Delta_{encode}$ captures the change to high accuracy and indicates the worsening of system when successive bad trajectories are added to a class, indicating that a trajectory class split is highly necessary. 
+
+Thus, $\Delta_{encode}$ and $GMM_{encode}$ are indicators which can be used to track and maintain trajectory classes instead of individual trajectories. This also gives a logic of when to split trajectory classes which has not been addressed in previous research.
+
+\subsection{Memory Usage}
+I encoded the 100 demonstration trajectories each of 50 data points ($traj_{points}=50$) using GMM-encoding multiple times with a threshold variation of $\epsilon = 1000$ and found out that the no. of trajectory class splits were 10-25 (N = 10-25) always even with random velocities and launch angle. I used n=6 states in the GMM encoding and m = 3 (no. of components tracked - x, y, t). Let the number of bytes required to store a double be 8 ($bytes_{double} = 8$) 
+Given, the above configuration, the number of bytes required to store the encoded demonstrations with and without GMM can be computed using Equations 15 and 16 as below,\\
+$GMM_{memory}$ = (10 to 25) * 8 * (6*3 + $6^{2}$*3 + 6) = 10,560 to 26,400 bytes.\\
+$Regular_{memory}$ = 100 * 8 * 3 * 50 = 120,000 bytes.
+
+As seen from above values, the reduction is by a factor of 10 which is highly significant when you consider a large dataset over a lifetime.
+
+\subsection{Accuracy of the Retrieved Trajectories}
+% Table 2
+\begin{table}[t]\renewcommand{\arraystretch}{1.5}\addtolength{\tabcolsep}{-1pt}
+\centering
+\caption{Retrieved Trajectories}
+\begin{tabular}{  | c | c | c | c |}
+  \hline
+  No. & $dist_{expected} (m)$ & $dist_{retrieved} (m)$ & $|\% dist_{error}|$\\
+  \hline 
+  1 & 100.00 & 99.95 & 0.05\\
+  2 & 150.00 & 148.02 & 1.32\\
+  3 & 200.00 & 202.36 & 1.18\\
+  4 & 1000.00 & 992.14 & 0.786\\
+  5 & 2000.00 & 2020.01 & 1.005\\
+  \hline
+\end{tabular}
+\label{tab:tab2}
+\end{table}
+
+Once the data has been modeled as a GMM, the retrieval of trajectories for any new configuration are done via the GMR. The accuracy of the retrieved trajectories in terms of the horizontal distance covered are as shown in Table ~\ref{tab:tab2} which shows the expected distance ($dist_{expected}$), retrieved distance from the model ($dist_{retrieved}$) and the absolute percentage error between the two ($|\% dist_{error}|$). From the experiments I conducted, the average absolute percentage error between the retrieved and the expected distance was found to be 2.03\%$\pm$1.02\%, which shows that the model is highly accurate in terms of the horizontal distance covered. However, this does not show the quality of the trajectories i.e., how accurate the trajectory is at each retrieved data point when compared to the ground truth which is beyond the scope of this project. 
 
 \section{Conclusion}
-The conclusion goes here.
+Lifelong learning helps robots to tackle variety of tasks and enables sharing of knowledge across tasks rather than re-learning everytime. To enable this to happen, we first needs to establish an efficient storage mechanism for the task's physical model and accurate retrieval of data for new configurations. In this project I have tried to solve this problem by using the projectile motion of punting a ball as an example. I encode the physical model using GMM encoding and as a result I show that the data can be compressed substantially (factor of 10) when compared to storing all data points, the logic for splitting the trajectory classes is based on the values of $\Delta_{encode}$ and $GMM_{encode}$ and highly accurate trajectories are retrieved using GMR.
 
 \section{Future Work}
-Future work goes here.
+The results obtained for the method described are highly promising (See Section III). However, validation of the trajectory retrieved at each data point is something to be done in the future work. The proposed also needs to be tested on various scenarios which can be thought of analogous to punting the ball example. Below are some of the example tasks which can be used to validate the method proposed so that it can be accepted as a generalized framework,
+
+\begin{itemize}
+\item{
+    Putting a golf ball
+}    
+\item{
+    Throwing darts
+}    
+\item{
+    Throwing a basketball into a hoop
+}    
+\item{
+    Knocking out a cricket stump with a ball, etc
+}
+\end{itemize}
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-
-
-The authors would like to thank...
+I would like to thank Dr. Ron Alterovitz for his continuous feedback throughout this project which helped me a great deal in overcoming many of the obstacles encountered in this project. I would also like acknowledge Dr. Sylvain Calinon as his implementation of the GMM and GMR formed the basis of my project on which I extended my method.
 
 \begin{thebibliography}{1}
 

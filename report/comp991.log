@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 17:45
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 19:26
 entering extended mode
  %&-line parsing enabled.
 **comp991.tex
@@ -262,11 +262,10 @@ Overfull \hbox (0.94499pt too wide) in paragraph at lines 144--145
  [][] 
  []
 
-[2 <./images/fig1.png> <./images/fig2.png>]
+[2 <./images/fig1.png>]
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 167.
 
-
-(/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
+ (/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
@@ -311,7 +310,7 @@ Overfull \hbox (0.94499pt too wide) in paragraph at lines 217--218
  [][] 
  []
 
-[3]
+[3 <./images/fig2.png>]
 Overfull \hbox (39.5704pt too wide) detected at line 254
 \OT1/cmr/m/n/10 ^^A[] = []\OML/cmm/m/it/10 :
  []
@@ -319,31 +318,16 @@ Overfull \hbox (39.5704pt too wide) detected at line 254
 <./images/fig4.png, id=34, 556.479pt x 433.62pt>
 File: ./images/fig4.png Graphic file (type png)
  <use ./images/fig4.png>
-Overfull \hbox (0.94499pt too wide) in paragraph at lines 284--285
- [][] 
- []
-
 <./images/fig5.png, id=35, 630.355pt x 432.014pt>
 File: ./images/fig5.png Graphic file (type png)
  <use ./images/fig5.png>
-Overfull \hbox (0.94499pt too wide) in paragraph at lines 292--293
- [][] 
- []
-
 <./images/fig6.png, id=36, 537.207pt x 419.166pt>
 File: ./images/fig6.png Graphic file (type png)
  <use ./images/fig6.png>
-Overfull \hbox (0.94499pt too wide) in paragraph at lines 300--301
- [][] 
- []
-
-File: ./images/fig4.png Graphic file (type png)
-<use ./images/fig4.png>
-File: ./images/fig5.png Graphic file (type png)
- <use ./images/fig5.png>
-File: ./images/fig6.png Graphic file (type png)
- <use ./images/fig6.png>
 [4 <./images/fig3.png (PNG copy)>]
+Underfull \vbox (badness 1478) has occurred while \output is active []
+
+ [5 <./images/fig4.png> <./images/fig5.png> <./images/fig6.png>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -355,17 +339,16 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[5 <./images/fig4.png> <./images/fig5.png> <./images/fig6.png>] [6]
-(./comp991.aux)
+[6] (./comp991.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2580 strings out of 495061
- 36455 string characters out of 1182620
- 100539 words of memory out of 3000000
- 5753 multiletter control sequences out of 15000+50000
+ 2578 strings out of 495061
+ 36436 string characters out of 1182620
+ 100479 words of memory out of 3000000
+ 5751 multiletter control sequences out of 15000+50000
  38797 words of font info for 72 fonts, out of 3000000 for 9000
  31 hyphenation exceptions out of 8191
  27i,12n,24p,1595b,297s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -382,12 +365,13 @@ s/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb
 ></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
 e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-texl
 ive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texlive/fonts/ty
-pe1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8
-a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
-xmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on comp991.pdf (6 pages, 346390 bytes).
+pe1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1/urw/time
+s/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/
+share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/
+fonts/type1/urw/times/utmri8a.pfb>
+Output written on comp991.pdf (6 pages, 364418 bytes).
 PDF statistics:
- 106 PDF objects out of 1000 (max. 8388607)
+ 110 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
