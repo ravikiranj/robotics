@@ -31,11 +31,6 @@
 %
 \usepackage{url}
 
-% *** TABLES ***
-%
-
-
-
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -211,14 +206,130 @@ The standard Expectation-Maximization (EM) algorithm used to estimate the HMM pa
     \begin{equation}
         W^{x}(t)= \begin{pmatrix}{\sum_{k=1}^{K} \beta_{k}(t) {\Sigma}_{k}^{R})}\end{pmatrix}^{-1}
     \end{equation}
-
-
 }
 \end{itemize}
+
+Figure ~\ref{fig:fig3} shows the results of GMM encoding of the data and the generalized trajectory retrieved via GMR.
+
+%% Figure3
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.5in]{fig3}
+\caption{The first subfigure shows the different demonstration trajectories, the second subfigure shows the GMM encoding (no. of states =  4) of the trajectories and the third subfigure shows the retrieved generalized trajectory via GMR.}
+\label{fig:fig3}
+\end{figure}
+
+\subsection{Continuous Learning and Data Storage}
+In lifelong learning, the robot is expected to learn continuously over time and update its internal model to accurately reproduce trajectory. In doing so, there needs to be a bound on the memory when the no. of input trajectories explode. I have researched on this problem and using the proposed data representation and encoding, I show that the memory required to store such a model is substantially small when compared to storing each of the individual demonstrations. The following section explains my approach in detail. 
+
+To demonstrate my method, I use the example of the projectile trajectories. In the normal case, one needs to store all the trajectories in order to efficiently represent the physics model. However, using the data representation approach detailed above, we only need to store the priors, means and covariance matrices of k components describing the demonstrations. 
+
+In lifelong learning, if a new trajectory is required to be processed by the system, depending on how much variance we allow within a single class of trajectories, a decision needs to be made as to whether we include it in one of the existing trajectory classes or split it into a new class. There is a fundamental assumption of an already existing minimal model for this approach to work. Hence, the major advantage in my approach is that I store trajectory classes instead of the actual trajectories. Another advantage is instead of storing all the data points within a trajectory, I replace them with the GMM encoded priors, means and covariances matrices of the components describing the trajectory. The math equations of my method are described below.
+
+Let,
+
+\begin {itemize}
+\item[]{\textit{K} = total no. of trajectories.}
+\item[]{\textit{N} = total no. of trajectory splits.}
+\item[]{\textit{n} = no. of states in the gaussian mixture model.}
+\item[]{\textit{m} = no. of gaussian mixture components.}
+\item[]{\textit{$\epsilon$} = threshold value of trajectory class variation.}
+\item[]{\textit{$traj_{points}$} = no. of data points per trajectory.} 
+\item[]{\textit{$\sigma$} = SD of the components in the trajectory class.} 
+\item[]{\textit{$\mu$} = mean of the components in the trajectory class.} 
+\item[]{\textit{$\sigma^\prime$} = SD of the components in the updated trajectory class.} 
+\item[]{\textit{$\mu^\prime$} = mean of the components in updated trajectory class.} 
+\item[]{\textit{$\Delta_{encode}$} = change of variation in updated trajectory class.} 
+\item[]{\textit{$GMM_{encode}$} = variation of the trajectory class (0 - 1).} 
+\item[]{\textit{$GMM_{memory}$} = used memory with GMM encoding.} 
+\item[]{\textit{$Regular_{memory}$} = used memory without GMM.} 
+\item[]{\textit{$bytes_{double}$} = no. of bytes to store a double value} 
+\end {itemize}
+
+Assume that there is an existing model, when a new trajectory is fed into the robot to process, a decision needs to be made whether the new trajectory can be put in one of the existing trajectory classes or a new split needs to be made. To make this decision, I compute the variation of all existing trajectory classes $\Delta_{encode}$ up on including the new trajectory as below,
+
+% Delta_Encode equation
+\begin{equation}
+\Delta_{encode} = \frac{\sum_{i=1}^m \sum_{j=1}^n \sum_{k=1}^n |\sigma_{ijk} - \sigma_{ijk}^\prime| + \sum_{i=1}^m \sum_{j=1}^n |\mu_{ij} - \mu_{ij}^\prime|}{\epsilon}.
+\end{equation}
+
+The $GMM_{encode}$ is a scaled version of $\Delta_{encode}$ which varies between 0 to 1 and is computed as below,
+% Conditional 
+\[
+    \text{$GMM_{encode}$}= 
+\begin{cases}
+    1, & \text{if $\Delta_{encode}$} \geq 1\\
+    \text{$\Delta_{encode}$}, & \text{otherwise}
+\end{cases}
+\]
+
+If the $GMM_{encode}$ value is more towards 0, it indicates that the trajectory class has little or no variation and hence can accomodate newer trajectories. As and when, the $GMM_{encode}$ nears 1, it indicates that a split is required as the variation limit has already been reached in the existing class.
+
+The memory usage with and without GMM encoding can be computed as below,
+% Memory Requirement
+\begin{equation}
+GMM_{memory} = N * bytes_{double} * ( nm + n^{2}m + n ).
+\end{equation}
+\begin{equation}
+Regular_{memory} = K * bytes_{double} * m * traj_{points}.
+\end{equation}
+
+\section{Experimental Results}
+For the experiments, I produced 100 demonstration trajectories using the Physics model outlined in Section IIA. Each of the trajectory has 50 data points and captures 3 components namely horizontal position \emph{x}, vertical position \emph{y} and the time \emph{t}. These trajectories are used to validate my method in the following sections.
+
+\subsection{Splitting trajectory classes}
+%% Figure4
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.5in]{fig4}
+\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 764.60, GMM_{encode} = 0.764, \epsilon=1000$}
+\label{fig:fig4}
+\end{figure}
+
+%% Figure5
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.5in]{fig5}
+\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 6321.61, GMM_{encode} = 1, \epsilon=1000$}
+\label{fig:fig5}
+\end{figure}
+
+%% Figure6
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.5in]{fig6}
+\caption{The figure shows the effect of including a new trajectory in an existing trajectory class. $\Delta_{encode} = 7494.22, GMM_{encode} = 1, \epsilon=1000$}
+\label{fig:fig6}
+\end{figure}
+
+\begin{figure*}[!t]
+\centerline{
+    \subfigure[Case I]{
+        \includegraphics[width=3.5in]{fig4}
+        \label{fig_4}
+    }
+    \subfigure[Case II]{
+        \includegraphics[width=3.5in]{fig5}
+        \label{fig_second_case}
+    }
+}
+\centerline{
+    \subfigure[Case III]{
+        \includegraphics[width=3.5in]{fig6}
+        \label{fig_second_case}
+    }
+}
+\caption{Simulation results}
+\label{fig_sim}
+\end{figure*}
+
 
 
 \section{Conclusion}
 The conclusion goes here.
+
+\section{Future Work}
+Future work goes here.
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
@@ -242,7 +353,6 @@ Sebastian B. Thrun and Tom M. Mitchell.  \emph{Lifelong robot learning. Robotics
 Thrun, S. B. 1994. \emph{A Lifelong Learning Perspective for Mobile Robot Control.} In Proceedings of the IEEE/RSJ/GI International Conference on Intelligent Robots and Systems, 23-30. Washington, D.C.: IEEE Computer Society.
 \bibitem{ref:7}
 Calinon S, Guenter F, Billard A (2006). \emph{On Learning the Statistical Representation of a Task and Generalizing it to Various Contexts.}  Proc IEEE/ICRA 2006.
-
 
 \end{thebibliography}
 

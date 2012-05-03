@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 14:50
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 17:45
 entering extended mode
  %&-line parsing enabled.
 **comp991.tex
@@ -201,23 +201,29 @@ Package: subfigure 2002/03/15 v2.1.5 subfigure package
 (/usr/share/texmf-texlive/tex/latex/ltxmisc/url.sty
 \Urlmuskip=\muskip11
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
-) (./comp991.aux)
+) (./comp991.aux
+
+LaTeX Warning: Label `fig_second_case' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig_second_case' multiply defined.
+
+)
 \openout1 = `comp991.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-
-(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+ (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count108
 \scratchdimen=\dimen130
@@ -234,71 +240,110 @@ LaTeX Font Info:    ... okay on input line 43.
 
 ]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 89.
+(Font)              <7> on input line 84.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 89.
+(Font)              <5> on input line 84.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 120.
+(Font)              <8> on input line 115.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 120.
+(Font)              <6> on input line 115.
 
 <./images/fig1.png, id=8, 786.2976pt x 659.1024pt>
 File: ./images/fig1.png Graphic file (type png)
  <use ./images/fig1.png>
-Overfull \hbox (0.94499pt too wide) in paragraph at lines 137--138
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 132--133
  [][] 
  []
 
 <./images/fig2.png, id=10, 963.6pt x 593.417pt>
 File: ./images/fig2.png Graphic file (type png)
  <use ./images/fig2.png>
-Overfull \hbox (0.94499pt too wide) in paragraph at lines 149--150
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 144--145
  [][] 
  []
 
 [2 <./images/fig1.png> <./images/fig2.png>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 172.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 167.
 
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 172.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 167.
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--174
 \OT1/ptm/m/n/10 com-po-nent k, and $\OML/cmm/m/it/10 N\OT1/cmr/m/n/10 ([]; []\O
 ML/cmm/m/it/10 ; \OT1/cmr/m/n/10 ^^F[])$ \OT1/ptm/m/n/10 is the D-
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 175--179
+Underfull \hbox (badness 1668) in paragraph at lines 170--174
 \OT1/ptm/m/n/10 Dimensional Gaus-sian den-sity of com-po-nent k. $[]$
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 175--179
+Underfull \hbox (badness 1694) in paragraph at lines 170--174
 \OT1/ptm/m/n/10 mul-ti-vari-ate Gaus-sian k. \OMS/cmsy/m/n/10 f$\OML/cmm/m/it/1
 0 ^^Y[]; []; \OT1/cmr/m/n/10 ^^F[]$\OMS/cmsy/m/n/10 g \OT1/ptm/m/n/10 are es-ti
 -mated
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--174
 
  []
 
 
-Underfull \hbox (badness 1354) in paragraph at lines 184--187
+Underfull \hbox (badness 1354) in paragraph at lines 179--182
 []\OT1/ptm/m/n/10 In or-der to mea-sure the sim-i-lar-ity be-tween a new
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 184--187
+Underfull \hbox (badness 10000) in paragraph at lines 179--182
 
  []
 
+<./images/fig3.png, id=26, 858.407pt x 310.761pt>
+File: ./images/fig3.png Graphic file (type png)
+ <use ./images/fig3.png>
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 217--218
+ [][] 
+ []
+
 [3]
+Overfull \hbox (39.5704pt too wide) detected at line 254
+\OT1/cmr/m/n/10 ^^A[] = []\OML/cmm/m/it/10 :
+ []
+
+<./images/fig4.png, id=34, 556.479pt x 433.62pt>
+File: ./images/fig4.png Graphic file (type png)
+ <use ./images/fig4.png>
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 284--285
+ [][] 
+ []
+
+<./images/fig5.png, id=35, 630.355pt x 432.014pt>
+File: ./images/fig5.png Graphic file (type png)
+ <use ./images/fig5.png>
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 292--293
+ [][] 
+ []
+
+<./images/fig6.png, id=36, 537.207pt x 419.166pt>
+File: ./images/fig6.png Graphic file (type png)
+ <use ./images/fig6.png>
+Overfull \hbox (0.94499pt too wide) in paragraph at lines 300--301
+ [][] 
+ []
+
+File: ./images/fig4.png Graphic file (type png)
+<use ./images/fig4.png>
+File: ./images/fig5.png Graphic file (type png)
+ <use ./images/fig5.png>
+File: ./images/fig6.png Graphic file (type png)
+ <use ./images/fig6.png>
+[4 <./images/fig3.png (PNG copy)>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -310,35 +355,39 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[4
+[5 <./images/fig4.png> <./images/fig5.png> <./images/fig6.png>] [6]
+(./comp991.aux)
 
-] (./comp991.aux) ) 
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2551 strings out of 495061
- 35970 string characters out of 1182620
- 98418 words of memory out of 3000000
- 5728 multiletter control sequences out of 15000+50000
+ 2580 strings out of 495061
+ 36455 string characters out of 1182620
+ 100539 words of memory out of 3000000
+ 5753 multiletter control sequences out of 15000+50000
  38797 words of font info for 72 fonts, out of 3000000 for 9000
  31 hyphenation exceptions out of 8191
- 27i,9n,24p,1595b,297s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/
-share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf
--texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fo
-nts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/pu
-blic/amsfonts/cm/cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfont
-s/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.p
-fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texl
-ive/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/typ
-e1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cm
-sy6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
-r/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texliv
-e/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/t
-imes/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on comp991.pdf (4 pages, 269746 bytes).
+ 27i,12n,24p,1595b,297s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
+ve/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/
+amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
+cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></
+usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/te
+xmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/
+fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfont
+s/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb
+></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
+e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-texl
+ive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8
+a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
+xmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on comp991.pdf (6 pages, 346390 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
+ 106 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
