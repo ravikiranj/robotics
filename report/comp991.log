@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 20:06
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.19)  3 MAY 2012 20:10
 entering extended mode
  %&-line parsing enabled.
 **comp991.tex
@@ -256,24 +256,25 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 81.
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-<./images/fig1.png, id=8, 786.2976pt x 659.1024pt>
-File: ./images/fig1.png Graphic file (type png)
- <use ./images/fig1.png>
+<fig1.png, id=8, 875.9124pt x 731.3724pt>
+File: fig1.png Graphic file (type png)
+ <use fig1.png>
 Overfull \hbox (0.94499pt too wide) in paragraph at lines 129--130
  [][] 
  []
 
-<./images/fig2.png, id=10, 963.6pt x 593.417pt>
+<./images/fig2.png, id=9, 963.6pt x 593.417pt>
 File: ./images/fig2.png Graphic file (type png)
  <use ./images/fig2.png>
 Overfull \hbox (0.94499pt too wide) in paragraph at lines 141--142
  [][] 
  []
 
-[2 <./images/fig1.png>]
+[2 <./fig1.png (PNG copy)>]
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 164.
 
- (/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
+
+(/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
@@ -312,7 +313,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 176--179
 
  []
 
-[3 <./images/fig2.png>] <./images/fig3.png, id=34, 858.407pt x 310.761pt>
+[3 <./images/fig2.png>] <./images/fig3.png, id=33, 858.407pt x 310.761pt>
 File: ./images/fig3.png Graphic file (type png)
 
 <use ./images/fig3.png>
@@ -325,13 +326,13 @@ Overfull \hbox (39.5704pt too wide) detected at line 251
 \OT1/cmr/m/n/10 ^^A[] = []\OML/cmm/m/it/10 :
  []
 
-<./images/fig4.png, id=35, 556.479pt x 433.62pt>
+<./images/fig4.png, id=34, 556.479pt x 433.62pt>
 File: ./images/fig4.png Graphic file (type png)
  <use ./images/fig4.png>
-<./images/fig5.png, id=36, 630.355pt x 432.014pt>
+<./images/fig5.png, id=35, 630.355pt x 432.014pt>
 File: ./images/fig5.png Graphic file (type png)
  <use ./images/fig5.png>
-<./images/fig6.png, id=37, 537.207pt x 419.166pt>
+<./images/fig6.png, id=36, 537.207pt x 419.166pt>
 File: ./images/fig6.png Graphic file (type png)
  <use ./images/fig6.png>
 [4 <./images/fig3.png (PNG copy)>] [5 <./images/fig4.png> <./images/fig5.png> <
@@ -354,8 +355,8 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  2655 strings out of 495061
- 37500 string characters out of 1182620
- 102138 words of memory out of 3000000
+ 37464 string characters out of 1182620
+ 102137 words of memory out of 3000000
  5813 multiletter control sequences out of 15000+50000
  41773 words of font info for 86 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
@@ -378,9 +379,9 @@ msfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb
 8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/
 texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/
 type1/urw/times/utmri8a.pfb>
-Output written on comp991.pdf (6 pages, 367534 bytes).
+Output written on comp991.pdf (6 pages, 361994 bytes).
 PDF statistics:
- 114 PDF objects out of 1000 (max. 8388607)
+ 113 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
