@@ -1,1 +1,13 @@
 This repository contains all of the robotics research projects.
+
+1) football-sim
+=================
+Run it by executing the command 'python punt.py'
+
+2)GMM-GMR-v2.0
+===============
+Open the folder in matlab and run 'demo1.m'
+
+3) report
+==========
+Use texworks IDE (pdfLaTeX) to compile the source latex file comp991.tex to obtain the PDF file.

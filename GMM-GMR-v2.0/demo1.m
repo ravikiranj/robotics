@@ -64,9 +64,9 @@ Data7 = traj_3_250m_100m_drag;
 
 
 % Choose data
-Data1 = Data3;
+Data1 = Data2;
 nbVar1 = size(Data1, 1);
-Data2 = Data4;
+Data2 = Data3;
 nbVar2 = size(Data2, 1);
 
 %% Training of GMM by EM algorithm, initialized by k-means clustering.
@@ -89,38 +89,35 @@ expData1(1,:) = linspace(min(Data1(1,:)), max(Data1(1,:)), 100);
 expData2(1,:) = linspace(min(Data2(1,:)), max(Data2(1,:)), 100);
 [expData2(2:nbVar2,:), expSigma2] = GMR(Priors2, Mu2, Sigma2,  expData2(1,:), [1], [2:nbVar2]);
 
-%% Plot of the data
+%% Plot of the GMM encoding results
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure('position',[10,10,1000,800],'name','GMM-GMR-demo1');
-subplot(3, 2, 1); hold on;
+figure('name','GMM-GMR-demo1');
+subplot(2, 3, 1); hold on;
 plot(Data1(2,:), Data1(3,:), 'x', 'markerSize', 4, 'color', [.3 .3 .3]);
 axis([min(Data1(2,:))-0.01 max(Data1(2,:))+0.01 min(Data1(3,:))-0.01 max(Data1(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
 
-
-%% Plot of the GMM encoding results
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-subplot(3, 2, 3); hold on;
+subplot(2, 3, 2); hold on;
 plotGMM(Mu1([2,3],:), Sigma1([2,3],[2,3],:), [0 .8 0], 1);
 axis([min(Data1(2,:))-0.01 max(Data1(2,:))+0.01 min(Data1(3,:))-0.01 max(Data1(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
 
-subplot(3, 2, 5); hold on;
+subplot(2, 3, 3); hold on;
 plotGMM(expData1([2,3],:), expSigma1([1,2],[1,2],:), [0 0 .8], 2);
 axis([min(Data1(2,:))-0.01 max(Data1(2,:))+0.01 min(Data1(3,:))-0.01 max(Data1(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
 
-subplot(3, 2, 2); hold on;
+subplot(2, 3, 4); hold on;
 plot(Data2(2,:), Data2(3,:), 'x', 'markerSize', 4, 'color', [.3 .3 .3]);
 axis([min(Data2(2,:))-0.01 max(Data2(2,:))+0.01 min(Data2(3,:))-0.01 max(Data2(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
 
-subplot(3, 2, 4); hold on;
+subplot(2, 3, 5); hold on;
 plotGMM(Mu2([2,3],:), Sigma2([2,3],[2,3],:), [0 .8 0], 1);
 axis([min(Data2(2,:))-0.01 max(Data2(2,:))+0.01 min(Data2(3,:))-0.01 max(Data2(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
 
-subplot(3, 2, 6); hold on;
+subplot(2, 3, 6); hold on;
 plotGMM(expData2([2,3],:), expSigma2([1,2],[1,2],:), [0 0 .8], 2);
 axis([min(Data2(2,:))-0.01 max(Data2(2,:))+0.01 min(Data2(3,:))-0.01 max(Data2(3,:))+0.01]);
 xlabel('x','fontsize',16); ylabel('y','fontsize',16);
