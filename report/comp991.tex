@@ -22,6 +22,7 @@
 % *** MATH PACKAGES ***
 %
 \usepackage[cmex10]{amsmath}
+\usepackage{amsfonts}
 
 % *** SPECIALIZED LIST PACKAGES ***
 % *** SUBFIGURE PACKAGES ***
@@ -31,15 +32,11 @@
 %
 \usepackage{url}
 
-% correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
-
-
 \begin{document}
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Lifelong Learning: A case study of punting balls}
+\title{Lifelong Learning: Data Representation and Retrieval using the Case Study of Punting Balls}
 
 
 % author names and affiliations
@@ -64,15 +61,15 @@ Email: ravikirn@cs.unc.edu}}
 
 \begin{abstract}
 %\boldmath
-Designing robots that learn by themselves to perform complex real-world tasks is a still-open challenge for the field of Robotics and Artificial Intelligence. In this project, I use the case study of punting balls as a lifelong learning problem. The robot is fed with demonstrations of punting a variety of balls and records the target distanced acheived and updates the physics model of the punt with each demonstration. The learning process is continuous and not stagnant and as a result of this, the internal model needs to be bounded by a finite memory and we need to represent model/data in an efficient format. After the initial demonstrations, the robot is able to predict the launch velocity and the angle of elevation given any new ball and a target distance to reach. The efficient data representation of the model is achieved using the combination of Gaussian Mixture Models (GMM) and Gaussian Mixture Regression (GMR) and I show that the memory required to store the such an internal model compared to storing each of the individual demonstrations is substantially small. Using this physics model, the robot can predict the configuration to punt a new ball to reach a target distance with high accuracy.
+Designing robots that learn by themselves to perform complex real-world tasks is still an open challenge for the field of Robotics and Artificial Intelligence. In this project, I use the case study of punting balls and propose a method of data representation and retrieval that enables lifelong learning. The robot is fed with demonstrations of punting a variety of balls and records the target distanced acheived and updates the physics model of the punt with each demonstration. The learning process is continuous and not stagnant and as a result of this, the internal model needs to be bounded by a finite memory and we need to represent model/data in an efficient format. After the initial demonstrations, the robot is able to predict the launch velocity and the angle of elevation given any new ball and a target distance to reach. The efficient data representation of the model and retrieval of data is achieved using the combination of Gaussian Mixture Models (GMM) and Gaussian Mixture Regression (GMR) and I show that the memory required to store the such an internal model compared to storing each of the individual demonstrations is substantially small. Using this physics model, the robot can predict the configuration to punt a new ball to reach a target distance with high accuracy.
 \end{abstract}
 
 \section{Introduction}
 Throughout the last decades, the field of robotics has produced a large variety of approaches to automate and perform a variety of tasks. Despite significant progress in virtually all aspects of robotics science, most of today's robots are specialized to perform a narrow set of tasks in a very particular kind of environment. Most robots employ specialized controllers that have been carefully designed by hand, using extensive knowledge of the robot, its environment and its task. If one is interested in building autonomous multi-purpose robots, such approaches face some serious bottlenecks such as knowledge bottleneck (not aware of all the dynamics at design time), engineering bottleneck (most models are explictly hand coded) and tractability bottleneck (high computational complexity). 
 
-Machine learning aims to overcome these limitations, by enabling a robot to collect its knowledge on-the-fly, through realworld experimentation. If a robot is placed in a novel, unknown environment, or faced with a novel tak for which no a priori solution is known, a robot that learns can collect new experiences, acquire new skills, and eventually perform new tasks all by itself. For example, in \cite{ref:1} a robot manipulator is described which learns to insert a peg in a hole without prior knowledge regarding the manipulator or the hole. Maes and Brooks \cite{ref:2} successfully applied learning techniques to coordinating leg motion for an insect-like robot. Their approach, too, operates in the absence of a model of the dynamics of the system. Learning techniques have frequently come to bear in situations where the physical world is extremely hard to model by hand (e.g., the characteristics of noisy sensors). For example, Pomerleau describes a computer system that learns to steer a vehicle driving at 55mph on public highways, based on input sensor data from a video camera \cite{ref:3}. Learning techniques have also successfully been applied to speed-up robot control, by observing the statistical regularities of "typical" situations (like typical robot and environment configurations), and compiling more compact controllers for the frequently encountered. For example, Mitchell \cite{ref:4} describes an approach in which a mobile robot becomes increasingly reactive, by using observations to compile fast rules out of a database of domain knowledge. 
+Machine learning aims to overcome these limitations, by enabling a robot to collect its knowledge on-the-fly, through realworld experimentation. If a robot is placed in a novel, unknown environment, or faced with a novel task for which no a priori solution is known, a robot that learns can collect new experiences, acquire new skills, and eventually perform new tasks all by itself. For example, in \cite{ref:1} a robot manipulator is described which learns to insert a peg in a hole without prior knowledge regarding the manipulator or the hole. Maes and Brooks \cite{ref:2} successfully applied learning techniques to coordinating leg motion for an insect-like robot. Their approach, too, operates in the absence of a model of the dynamics of the system. Learning techniques have frequently come to bear in situations where the physical world is extremely hard to model by hand (e.g., the characteristics of noisy sensors). For example, Pomerleau describes a computer system that learns to steer a vehicle driving at 55mph on public highways, based on input sensor data from a video camera \cite{ref:3}. Learning techniques have also successfully been applied to speed-up robot control, by observing the statistical regularities of "typical" situations (like typical robot and environment configurations), and compiling more compact controllers for the frequently encountered. For example, Mitchell \cite{ref:4} describes an approach in which a mobile robot becomes increasingly reactive, by using observations to compile fast rules out of a database of domain knowledge. 
 
-However, there is a principle shortcoming in most of to date's rigorous learning approaches. Most of the robot control learning approaches focus on learning to achieve single, isolated performance tasks. If one is interested in learning with a minimum amount of initial knowledge, as is often the case in approaches to robot learning, such approaches have a critical limiting factor the number of training examples required for successful generalization. The more complex the task at hand and the lesser is known about the problem beforehand, the more training data is necessary to achieve the task. In many robotics domains the collection of training data is an expensive undertaking due to the slowness of robotics hardware. Hence, it does not surprise that the time required for real-world experimentation has frequently been found to be the limiting factor that prevents rigorous machine learning techniques from being truly successful in robotics. 
+However, there is a principle shortcoming in most of to-date's rigorous learning approaches. Most of the robot control learning approaches focus on learning to achieve single, isolated performance tasks. If one is interested in learning with a minimum amount of initial knowledge, as is often the case in approaches to robot learning, such approaches have a critical limiting factor the number of training examples required for successful generalization. The more complex the task at hand and the lesser is known about the problem beforehand, the more training data is necessary to achieve the task. In many robotics domains the collection of training data is an expensive undertaking due to the slowness of robotics hardware. Hence, it does not surprise that the time required for real-world experimentation has frequently been found to be the limiting factor that prevents rigorous machine learning techniques from being truly successful in robotics. 
 
 The task of learning from scratch can be significantly simplified by considering robots that face whole collections of control learning problems over their entire lifetime. In such a lifelong robot learning scenario \cite{ref:5, ref:6}, learning tasks are related in that they all play in the same environment, and that they involve the the same robot hardware. Lifelong learning scenarios open the opportunity for the transfer of knowledge across tasks. Complex tasks, which might require huge amounts of training data when faced in isolation, can conceivably be achieved much faster if a robot manages to exploit previously learned knowledge. For example, a lifelong learning robot might acquire general-purpose knowledge about itself and its environment, or acquire generally useful skills that can be applied in the context of multiple tasks. Such functions, once learned, can be applied to speed up learning in new tasks. 
 
@@ -130,7 +127,7 @@ where g = 9.8m/$s^{2}$ and the negative sign indicates that these forces are act
 \begin{figure}[!t]
 \centering
 \includegraphics[width=3.5in]{fig1}
-\caption{Projectile with and without drag}
+\caption{Projectile with drag, without drag and with drag correction}
 \label{fig:fig1}
 \end{figure}
 
@@ -158,17 +155,17 @@ The model is composed of the following processes:
 \end{itemize}
 
 \subsubsection{Probabilistic data encoding}
-To avoid making too many assumptions on the spatio-temporal variability of the dataset, I use a HMM with the most general architecture, such as a fully connected continuous HMM, with full covariance matrix, describing the output variables distribution. However, using such a model requires the estimation of a large set of parameters, which can be achieved only with a large dataset. However, to program efciently a robot by demonstration, the demonstrator should not have to perform more than a few (5 to 10) demonstrations. This means that the set of parameters to learn is quite large, compared to the amount of training data. 
+To avoid making too many assumptions on the spatio-temporal variability of the dataset, I use a HMM with the most general architecture, such as a fully connected continuous HMM, with full covariance matrix, describing the output variables distribution. However, using such a model requires the estimation of a large set of parameters, which can be achieved only with a large dataset. However, to program efficiently a robot by demonstration, the demonstrator should not have to perform more than a few (5 to 10) demonstrations. This means that the set of parameters to learn is quite large, compared to the amount of training data. 
 
 The standard Expectation-Maximization (EM) algorithm used to estimate the HMM parameters starts from initial estimates, and converges to the nearest local maximum of the likelihood function. Thus, initialization highly affects the model performance. To better estimate the state distribution of the HMM, I perform first a rough clustering of the data using k-means. Next, I estimate a Gaussian Mixture Model (GMM) by EM, using the k-means clusters at initialization. Finally, the dynamics, i.e. transitions across states, are encoded in a HMM, with the GMM state variable distribution.
 
 \begin{itemize}
 \item[a)]{
-    \textbf{Gaussian Mixture Model (GMM):} A dataset of N data of dimensionality D, X = \{$\vec{x(t_{1})}, \vec{x(t_{1})},\dots,\vec{x(t_{N})}$\} with $\vec{x(t_{n})} \in R^{D}$ is modelled by a multivariate Gaussian mixture of K-components
+    \textbf{Gaussian Mixture Model (GMM):} A dataset of N data of dimensionality D, X = \{$\vec{x}(t_{1}), \vec{x}(t_{1}),\dots,\vec{x}(t_{N})$\} with $\vec{x}(t_{n}) \in \mathbb{R}^{D}$ is modelled by a multivariate Gaussian mixture of K-components
     \begin{equation}
-        p(\vec{x(t_{n})}) = \sum_{k=1}^K \pi_{k} N (\vec{x(t_{n})}; \vec{\mu_{k}}, \Sigma_{k})
+        p(\vec{x}(t_{n})) = \sum_{k=1}^K \pi_{k} N (\vec{x}(t_{n}); \vec{\mu_{k}}, \Sigma_{k})
     \end{equation}
-    where $\pi_{k}$ is the prior probability on the Gaussian component k, and $N (\vec{x(t_{n})}; \vec{\mu_{k}}, \Sigma_{k})$ is the D-Dimensional Gaussian density of component k. $\vec{\mu_{k}}$ and $\Sigma_{k}$ are the mean and covariance matrix of the multivariate Gaussian k. \{$\pi_{k}, \vec{\mu_{k}} , \Sigma_{k}$\} are estimated using the Expectation-Maximization (EM) algorithm.
+    where $\pi_{k}$ is the prior probability on the Gaussian component k, and $N (\vec{x}(t_{n}); \vec{\mu_{k}}, \Sigma_{k})$ is the D-Dimensional Gaussian density of component k. $\vec{\mu_{k}}$ and $\Sigma_{k}$ are the mean and covariance matrix of the multivariate Gaussian k. \{$\pi_{k}, \vec{\mu_{k}} , \Sigma_{k}$\} are estimated using the Expectation-Maximization (EM) algorithm.
 }    
 \\
 \item[b)]{
@@ -180,7 +177,7 @@ The standard Expectation-Maximization (EM) algorithm used to estimate the HMM pa
 }
 \\
 \item[c)]{
-    \textbf{Gaussian Mixture Regression (GMR):} To reconstruct the trajectory from the GMM/HMM encoding, after training and generalization over the demonstrations, I apply a Gaussian Mixture Regression (GMR). For a D-Dimensional variable $\vec{x} \in R^{D}$, the means and covariance matrices given by the GMM/HMM representation for component k are given by $\vec{\mu}_{kX}^{H}$ and ${\Sigma}_{kX}^{H}$. The regression is done along the time index. We compute the means and covariance matrices of the set of observations \{$t, \vec{x}(t)$\} with dimension (D+1). Note that the sole time-indexed covariances matrices and means are estimated, since the rest of the means and covariance matrices \{$\vec{\mu}_{kX}^{H}$, ${\Sigma}_{kX}^{H}$\} have already been estimated:
+    \textbf{Gaussian Mixture Regression (GMR):} To reconstruct the trajectory from the GMM/HMM encoding, after training and generalization over the demonstrations, I apply a Gaussian Mixture Regression (GMR). For a D-Dimensional variable $\vec{x} \in \mathbb{R}^{D}$, the means and covariance matrices given by the GMM/HMM representation for component k are given by $\vec{\mu}_{kX}^{H}$ and ${\Sigma}_{kX}^{H}$. The regression is done along the time index. We compute the means and covariance matrices of the set of observations \{$t, \vec{x}(t)$\} with dimension (D+1). Note that the sole time-indexed covariances matrices and means are estimated, since the rest of the means and covariance matrices \{$\vec{\mu}_{kX}^{H}$, ${\Sigma}_{kX}^{H}$\} have already been estimated:
     \begin{equation}
         \vec{\mu}_{k}^{R} = \{\vec{\mu}_{kt}^{R}, \vec{\mu}_{kx_{1}}^{H}, \vec{\mu}_{kx_{2}}^{H}, \dots, \vec{\mu}_{kx_{D}}^{H}\}
     \end{equation}
@@ -220,7 +217,7 @@ Figure ~\ref{fig:fig3} shows the results of GMM encoding of the data and the gen
 \end{figure}
 
 \subsection{Continuous Learning and Data Storage}
-In lifelong learning, the robot is expected to learn continuously over time and update its internal model to accurately reproduce trajectory. In doing so, there needs to be a bound on the memory when the no. of input trajectories explode. I have researched on this problem and using the proposed data representation and encoding, I show that the memory required to store such a model is substantially small when compared to storing each of the individual demonstrations. The following section explains my approach in detail. 
+In lifelong learning, the robot is expected to learn continuously over time and update its internal model to accurately reproduce trajectory. In doing so, there needs to be a bound on the memory when the no. of input trajectories explode. I have researched on this problem and using the proposed data representation and encoding along with the trajectory class splitting logic as explained further, I show that the memory required to store such a model is substantially small when compared to storing each of the individual demonstrations. The following section explains my approach in detail. 
 
 To demonstrate my method, I use the example of the projectile trajectories. In the normal case, one needs to store all the trajectories in order to efficiently represent the physics model. However, using the data representation approach detailed above, we only need to store the priors, means and covariance matrices of k components describing the demonstrations. 
 
@@ -241,9 +238,9 @@ Let,
 \item[]{\textit{$\mu^\prime$} = mean of the components in updated trajectory class.} 
 \item[]{\textit{$\Delta_{encode}$} = change of variation in updated trajectory class.} 
 \item[]{\textit{$GMM_{encode}$} = variation of the trajectory class (0 - 1).} 
-\item[]{\textit{$GMM_{memory}$} = used memory with GMM encoding.} 
-\item[]{\textit{$Regular_{memory}$} = used memory without GMM.} 
-\item[]{\textit{$bytes_{double}$} = no. of bytes to store a double value} 
+\item[]{\textit{$GMM_{memory}$} = memory used with GMM encoding.} 
+\item[]{\textit{$Regular_{memory}$} = memory used without GMM.} 
+\item[]{\textit{$bytes_{double}$} = no. of bytes required to store a double.} 
 \end {itemize}
 
 Assume that there is an existing model, when a new trajectory is fed into the robot to process, a decision needs to be made whether the new trajectory can be put in one of the existing trajectory classes or a new split needs to be made. To make this decision, I compute the variation of all existing trajectory classes $\Delta_{encode}$ up on including the new trajectory as below,
@@ -308,17 +305,17 @@ Figure ~\ref{fig:fig4} shows the result of expanding and splitting of existing t
 
 Consider Case II, the existing model consists of similar trajectories with target distance of 100$\pm$5m. The new trajectory is having the target distance of 250m and upon including this trajectory in the class, the $\Delta_{encode}$ computed is 6321.61 and the $GMM_{encode}$ is 1.0 which means that the new trajectory cannot be included in the class as it will exceed the variation of the class greater than the threshold and will hurt the quality of the retrieved trajectory significantly.
 
-Consider Case III, the existing model is faulty and includes more variation than intended and on trying to include a new trajectory which is again different from existing trajectories, the $\Delta_{encode}$ computed reads 7494.22 and the $GMM_{encode}$ is 1.0. This result shows that the $\Delta_{encode}$ captures the change to high accuracy and indicates the worsening of system when successive bad trajectories are added to a class, indicating that a trajectory class split is highly necessary. 
+Consider Case III, the existing model is faulty and includes more variation than intended and on trying to include a new trajectory which is again different from existing trajectories, the $\Delta_{encode}$ computed reads 7494.22 and the $GMM_{encode}$ is 1.0. This result shows that the $\Delta_{encode}$ captures the change accurately and indicates the worsening of system when successive bad trajectories are added to a class. This means that the trajectory class split is highly necessary. 
 
 Thus, $\Delta_{encode}$ and $GMM_{encode}$ are indicators which can be used to track and maintain trajectory classes instead of individual trajectories. This also gives a logic of when to split trajectory classes which has not been addressed in previous research.
 
 \subsection{Memory Usage}
-I encoded the 100 demonstration trajectories each of 50 data points ($traj_{points}=50$) using GMM-encoding multiple times with a threshold variation of $\epsilon = 1000$ and found out that the no. of trajectory class splits were 10-25 (N = 10-25) always even with random velocities and launch angle. I used n=6 states in the GMM encoding and m = 3 (no. of components tracked - x, y, t). Let the number of bytes required to store a double be 8 ($bytes_{double} = 8$) 
+For this experiment, I encoded 100 demonstration trajectories each of 50 data points ($traj_{points}=50$) using GMM-encoding multiple times with a threshold variation of $\epsilon = 1000$ and found out that the no. of trajectory class splits were between 10 - 25 (N = 10-25) even with random velocities and launch angle. I used n=6 states in the GMM encoding and m = 3 (no. of components tracked - x, y, t). Let the number of bytes required to store a double be 8 ($bytes_{double} = 8$) 
 Given, the above configuration, the number of bytes required to store the encoded demonstrations with and without GMM can be computed using Equations 15 and 16 as below,\\
 $GMM_{memory}$ = (10 to 25) * 8 * (6*3 + $6^{2}$*3 + 6) = 10,560 to 26,400 bytes.\\
 $Regular_{memory}$ = 100 * 8 * 3 * 50 = 120,000 bytes.
 
-As seen from above values, the reduction is by a factor of 10 which is highly significant when you consider a large dataset over a lifetime.
+As seen from above values, while using GMM encoding the reduction in memory usage is by a factor of 10 in the best case which is highly significant when you consider a large dataset over a lifetime.
 
 \subsection{Accuracy of the Retrieved Trajectories}
 % Table 2
@@ -339,13 +336,13 @@ As seen from above values, the reduction is by a factor of 10 which is highly si
 \label{tab:tab2}
 \end{table}
 
-Once the data has been modeled as a GMM, the retrieval of trajectories for any new configuration are done via the GMR. The accuracy of the retrieved trajectories in terms of the horizontal distance covered are as shown in Table ~\ref{tab:tab2} which shows the expected distance ($dist_{expected}$), retrieved distance from the model ($dist_{retrieved}$) and the absolute percentage error between the two ($|\% dist_{error}|$). From the experiments I conducted, the average absolute percentage error between the retrieved and the expected distance was found to be 2.03\%$\pm$1.02\%, which shows that the model is highly accurate in terms of the horizontal distance covered. However, this does not show the quality of the trajectories i.e., how accurate the trajectory is at each retrieved data point when compared to the ground truth which is beyond the scope of this project. 
+Once the data has been modeled as a GMM, the retrieval of trajectories for any new configuration are done via the GMR. The accuracy of the retrieved trajectories in terms of the horizontal distance covered are as shown in Table ~\ref{tab:tab2} which shows the expected distance ($dist_{expected}$), retrieved distance from the model ($dist_{retrieved}$) and the absolute percentage error between the two ($|\% dist_{error}|$). From the experiments I conducted, the average absolute percentage error between the retrieved and the expected distance was found to be 2.03\%$\pm$1.02\%, which is a highly acceptable accuracy for the horizontal distance covered. However, this does not show the quality of the trajectories i.e., how accurate the trajectory is at each retrieved data point when compared to the ground truth which is beyond the scope of this project. 
 
 \section{Conclusion}
 Lifelong learning helps robots to tackle variety of tasks and enables sharing of knowledge across tasks rather than re-learning everytime. To enable this to happen, we first needs to establish an efficient storage mechanism for the task's physical model and accurate retrieval of data for new configurations. In this project I have tried to solve this problem by using the projectile motion of punting a ball as an example. I encode the physical model using GMM encoding and as a result I show that the data can be compressed substantially (factor of 10) when compared to storing all data points, the logic for splitting the trajectory classes is based on the values of $\Delta_{encode}$ and $GMM_{encode}$ and highly accurate trajectories are retrieved using GMR.
 
 \section{Future Work}
-The results obtained for the method described are highly promising (See Section III). However, validation of the trajectory retrieved at each data point is something to be done in the future work. The proposed also needs to be tested on various scenarios which can be thought of analogous to punting the ball example. Below are some of the example tasks which can be used to validate the method proposed so that it can be accepted as a generalized framework,
+The results obtained for the method described above is highly promising (see Section III). However, validation of the trajectory retrieved at each data point is something to be done in the future work. The proposed framework also needs to be tested on various scenarios which can be thought of analogous to punting the ball example. Below are some of the example tasks which can be used to validate the method proposed so that it can be accepted as a generalized framework,
 
 \begin{itemize}
 \item{
